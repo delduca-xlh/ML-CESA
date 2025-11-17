@@ -1,3 +1,3 @@
 # ML-CESA
 2026 Machine Learning Center of Excellence Summer Associate – Time Series &amp; Reinforcement Learning Internship Project  
-Participant: Lihao Xiao
+Participant: Lihao Xiao: a Ph.D. candidate in Statistics at the University of California, Santa Barbara. My research focuses on multi-task deep learning for large-scale time-series forecasting, combining transformer architectures, soft clustering, and similarity-based ensembles. I develop scalable models that bridge statistical theory and modern machine learning, with applications in finance, healthcare, and environmental systems. Beyond research, I’m passionate about quantitative modeling, reinforcement learning, and algorithmic trading, aiming to design intelligent systems that learn from complex, real-world data.
