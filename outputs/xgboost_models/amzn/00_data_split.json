@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-12-21T15:39:02.608169",
+  "ticker": "AMZN",
+  "total_quarters": 116,
+  "development_quarters": 93,
+  "test_quarters": 23,
+  "development_period": "0 to 92",
+  "test_period": "93 to 115",
+  "note": "Test set held out and will only be used in Step 6"
+}

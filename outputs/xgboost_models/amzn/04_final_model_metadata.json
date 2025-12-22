@@ -1,0 +1,5 @@
+{
+  "company_ticker": "AMZN",
+  "model_type": "xgboost",
+  "trained": true
+}

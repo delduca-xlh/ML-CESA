@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-12-21T16:07:33.737663",
+  "ticker": "AMZN",
+  "test_samples": 4,
+  "test_mape": 19.793291141259907,
+  "individual_mapes": {
+    "sales_revenue": 14.296322504980234,
+    "cost_of_goods_sold": 12.030384642746641,
+    "overhead_expenses": 10.262983338828374,
+    "payroll_expenses": 10.262983338828374,
+    "capex": 52.11378188091592
+  },
+  "grade": "\u2b50\u2b50\u2b50\u2b50 Very Good!"
+}

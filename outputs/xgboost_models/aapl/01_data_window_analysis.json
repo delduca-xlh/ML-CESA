@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-21T21:56:57.844335",
+  "ticker": "AAPL",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 9.706657075060049,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 12.345209611995951,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 17.30595230842776,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "120Q": {
+      "mape": 28.067814893496177,
+      "samples": 92,
+      "quarters": 120,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 9.706657075060049
+}

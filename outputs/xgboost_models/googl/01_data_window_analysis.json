@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-21T21:17:10.461870",
+  "ticker": "GOOGL",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 24.082364209557973,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 20.583640917388998,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 35.62937951510227,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "88Q": {
+      "mape": 36.834017040274375,
+      "samples": 67,
+      "quarters": 88,
+      "status": "success"
+    }
+  },
+  "optimal_window": 60,
+  "optimal_mape": 20.583640917388998
+}

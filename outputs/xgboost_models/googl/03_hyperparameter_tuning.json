@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-21T21:17:15.959656",
+  "ticker": "GOOGL",
+  "cv_results": {
+    "Conservative": {
+      "mean_mape": 32.27507642707517,
+      "std_mape": 4.242077313627767
+    },
+    "Balanced": {
+      "mean_mape": 20.55452018387333,
+      "std_mape": 5.8701316309847895
+    },
+    "Aggressive": {
+      "mean_mape": 17.601305139942173,
+      "std_mape": 6.053738161543366
+    }
+  },
+  "best_configuration": "Aggressive",
+  "best_cv_mape": 17.601305139942173,
+  "best_parameters": {
+    "n_estimators": 200,
+    "max_depth": 5,
+    "learning_rate": 0.08,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "reg_alpha": 0.2,
+    "reg_lambda": 2.0,
+    "min_child_weight": 2,
+    "gamma": 0.05
+  }
+}

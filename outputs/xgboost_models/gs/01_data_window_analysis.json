@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-21T22:01:01.220264",
+  "ticker": "GS",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 13.147828001516828,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 61.30951585770208,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 30.160443452968998,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "106Q": {
+      "mape": 36.58649702274568,
+      "samples": 81,
+      "quarters": 106,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 13.147828001516828
+}

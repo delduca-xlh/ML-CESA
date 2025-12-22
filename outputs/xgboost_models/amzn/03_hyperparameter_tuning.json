@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-21T21:32:29.887155",
+  "ticker": "AMZN",
+  "cv_results": {
+    "Conservative": {
+      "mean_mape": 41.3139282551132,
+      "std_mape": 8.69739035401503
+    },
+    "Balanced": {
+      "mean_mape": 32.01863583213996,
+      "std_mape": 6.945749430008479
+    },
+    "Aggressive...": {
+      "mean_mape": 19.36567815393827,
+      "std_mape": 6.216394512112092
+    }
+  },
+  "best_configuration": "Aggressive...",
+  "best_cv_mape": 19.36567815393827,
+  "best_parameters": {
+    "n_estimators": 150,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.5,
+    "reg_lambda": 5.0,
+    "min_child_weight": 3,
+    "gamma": 0.1
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "company_ticker": "GOOGL",
+  "model_type": "xgboost",
+  "trained": true
+}

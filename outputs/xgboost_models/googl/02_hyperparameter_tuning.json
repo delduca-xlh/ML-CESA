@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-12-20T01:09:35.551494",
+  "ticker": "GOOGL",
+  "data_window": 60,
+  "configurations_tested": {
+    "Conservative": 20.227172110625435,
+    "Balanced": 17.90591420931573,
+    "Aggressive": 17.279673941022203
+  },
+  "best_configuration": "Aggressive",
+  "best_mape": 17.279673941022203,
+  "best_parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "learning_rate": 0.1,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "reg_alpha": 0.0,
+    "reg_lambda": 0.5
+  }
+}

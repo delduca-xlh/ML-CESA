@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-21T20:56:16.371531",
+  "ticker": "MSFT",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 21.667955592961345,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 21.489224930303802,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 27.39504330814548,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "120Q": {
+      "mape": 37.95939988144998,
+      "samples": 92,
+      "quarters": 120,
+      "status": "success"
+    }
+  },
+  "optimal_window": 60,
+  "optimal_mape": 21.489224930303802
+}

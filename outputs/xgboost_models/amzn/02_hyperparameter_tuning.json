@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-12-20T01:13:11.695700",
+  "ticker": "AMZN",
+  "data_window": 40,
+  "configurations_tested": {
+    "Conservative": 18.239058499577613,
+    "Balanced": 15.49577155551961,
+    "Aggressive": 14.075186286380506
+  },
+  "best_configuration": "Aggressive",
+  "best_mape": 14.075186286380506,
+  "best_parameters": {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "learning_rate": 0.1,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "reg_alpha": 0.0,
+    "reg_lambda": 0.5
+  }
+}

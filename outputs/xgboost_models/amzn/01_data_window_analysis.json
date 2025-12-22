@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-21T21:32:27.103102",
+  "ticker": "AMZN",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 18.388125161940316,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 19.984169910057382,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 26.12230965972649,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "116Q": {
+      "mape": 50.255397760522854,
+      "samples": 89,
+      "quarters": 116,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 18.388125161940316
+}

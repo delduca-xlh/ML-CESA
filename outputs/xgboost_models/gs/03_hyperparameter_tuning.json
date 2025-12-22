@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-21T22:01:03.852627",
+  "ticker": "GS",
+  "cv_results": {
+    "Conservative": {
+      "mean_mape": 35.89210330258687,
+      "std_mape": 14.498186972154443
+    },
+    "Balanced": {
+      "mean_mape": 31.41821169610214,
+      "std_mape": 12.635039950889603
+    },
+    "Aggressive...": {
+      "mean_mape": 27.632686796946246,
+      "std_mape": 16.737610209723254
+    }
+  },
+  "best_configuration": "Aggressive...",
+  "best_cv_mape": 27.632686796946246,
+  "best_parameters": {
+    "n_estimators": 150,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.5,
+    "reg_lambda": 5.0,
+    "min_child_weight": 3,
+    "gamma": 0.1
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-20T01:08:39.389083",
+  "ticker": "AAPL",
+  "pipeline_version": "1.0",
+  "data_window": {
+    "quarters": 40,
+    "years": 10.0
+  },
+  "model_parameters": {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0
+  },
+  "performance": {
+    "test_mape": 9.84338518133145,
+    "train_samples": 28,
+    "test_samples": 8,
+    "individual_mapes": {
+      "sales_revenue": 6.096111218871561,
+      "cost_of_goods_sold": 4.830265305059801,
+      "overhead_expenses": 9.664473560694827,
+      "payroll_expenses": 9.664473560694827,
+      "capex": 18.961602261336235
+    }
+  },
+  "files": {
+    "model": "03_final_model_models.pkl",
+    "forecast": "04_forecast_latest.csv",
+    "data_analysis": "01_data_window_analysis.json",
+    "tuning_results": "02_hyperparameter_tuning.json"
+  }
+}

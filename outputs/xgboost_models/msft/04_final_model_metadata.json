@@ -1,0 +1,5 @@
+{
+  "company_ticker": "MSFT",
+  "model_type": "xgboost",
+  "trained": true
+}

@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-12-20T01:11:12.521426",
+  "ticker": "MSFT",
+  "data_window": 40,
+  "configurations_tested": {
+    "Conservative": 20.694914983985637,
+    "Balanced": 17.87223159865662,
+    "Aggressive": 18.197888875184013
+  },
+  "best_configuration": "Balanced",
+  "best_mape": 17.87223159865662,
+  "best_parameters": {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0
+  }
+}
