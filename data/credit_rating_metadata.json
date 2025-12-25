@@ -1,0 +1,16 @@
+{
+  "created": "2025-12-24T14:22:33.513777",
+  "total_companies": 452,
+  "successful": 447,
+  "failed": 5,
+  "period": "annual",
+  "features": [
+    "debt_to_equity",
+    "interest_coverage",
+    "current_ratio",
+    "net_margin",
+    "roa",
+    "debt_to_ebitda",
+    "log_assets"
+  ]
+}

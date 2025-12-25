@@ -1,0 +1,10 @@
+{
+  "gross_margin": 0.41,
+  "avg_net_income_margin": 0.175,
+  "avg_ebit_margin": 0.185,
+  "capex_to_revenue": 0.013,
+  "retention_ratio": 0.95,
+  "reasoning": "Gross margins expected to stabilize around 41% level based on Q7-Q8 trend, below the 45%+ peaks of Q2-Q6 due to continued content investment needs in competitive streaming landscape. Net margin forecast of 17.5% reflects normalization from recent 17.6-18.1% range, accounting for seasonal Q1 weakness. EBIT margin slightly higher at 18.5% based on operating leverage. CapEx remains low at 1.3% of revenue consistent with asset-light streaming model. High retention ratio of 95% continues Netflix's strategy of reinvesting in content rather than aggressive capital returns, with only modest buyback activity expected. Revenue growth likely to remain muted given streaming market maturity, making margin management and selective content investment critical for profitability.",
+  "source": "LLM",
+  "ticker": "NFLX"
+}

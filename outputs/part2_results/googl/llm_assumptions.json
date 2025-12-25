@@ -1,0 +1,10 @@
+{
+  "gross_margin": 0.55,
+  "avg_net_income_margin": 0.22,
+  "avg_ebit_margin": 0.26,
+  "capex_to_revenue": 0.11,
+  "retention_ratio": 0.3,
+  "reasoning": "Gross margins expected to stabilize around 55% as AI infrastructure costs level off but remain elevated. Net margins forecasted to gradually recover from Q8 low of 20.1% to average 22% as AI monetization improves and operational leverage returns. EBIT margins should recover modestly to 26% from recent 24.8% low. CapEx/revenue elevated at 11% vs historical 8-9% due to continued AI infrastructure investments. Retention ratio improving slightly to 30% from 25.8% as company moderates buyback pace while maintaining growth investments. Key risks include continued margin pressure from AI competition and regulatory headwinds.",
+  "source": "LLM",
+  "ticker": "GOOGL"
+}

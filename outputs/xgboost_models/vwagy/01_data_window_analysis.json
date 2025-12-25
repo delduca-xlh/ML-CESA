@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-12-22T21:08:40.364733",
+  "ticker": "VWAGY",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 10.212671806040095,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 22.357679844441158,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "68Q": {
+      "mape": 31.43508800741539,
+      "samples": 51,
+      "quarters": 68,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 10.212671806040095
+}

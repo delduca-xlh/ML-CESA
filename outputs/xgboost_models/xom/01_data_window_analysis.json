@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-22T21:08:08.954549",
+  "ticker": "XOM",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 7.708899322233893,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 13.597526183844568,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 19.868588429884884,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "120Q": {
+      "mape": 13.714983160975715,
+      "samples": 92,
+      "quarters": 120,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 7.708899322233893
+}

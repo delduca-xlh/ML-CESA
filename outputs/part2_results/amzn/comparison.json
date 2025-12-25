@@ -1,0 +1,18 @@
+{
+  "part1_mapes": {
+    "Net Income": 78.72876379000884,
+    "EBIT": 73.2787132012507,
+    "Total Assets": 32.39847071452798,
+    "Total Equity": 52.08047738709195
+  },
+  "part2_mapes": {
+    "Net Income": 53.49466701560881,
+    "EBIT": 39.035853007546095,
+    "Total Assets": 4.419523762485423,
+    "Total Equity": 7.341789537130376
+  },
+  "part1_overall": 59.12160627321986,
+  "part2_overall": 26.07295833069268,
+  "winner": "Part 2 (LLM)",
+  "llm_source": "LLM"
+}

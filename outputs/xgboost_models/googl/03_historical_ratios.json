@@ -1,0 +1,16 @@
+{
+  "gross_margin": 0.5628813614592105,
+  "avg_ebit_margin": 0.28973784007227765,
+  "avg_net_income_margin": 0.2639591961221738,
+  "capex_to_revenue": 0.10359987953725426,
+  "retention_ratio": 0.2582771350502878,
+  "avg_interest_rate": 0.011880181413581044,
+  "tax_rate": 0.15889587051661327,
+  "overhead_to_revenue": 0.2731435213869329,
+  "payroll_to_revenue": 0.13657176069346644,
+  "cash_to_revenue": 0.1,
+  "ar_days": 45.0,
+  "inventory_days": 30.0,
+  "ap_days": 45.0,
+  "last_shares_outstanding": 13000000000.0
+}

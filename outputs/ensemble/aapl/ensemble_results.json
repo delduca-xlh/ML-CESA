@@ -1,0 +1,50 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2025-12-25T14:05:40.150420",
+  "test_periods": 4,
+  "best_approach": "ML + LLM Ratios",
+  "approach_comparison": {
+    "ML + Historical": {
+      "driver_mape": 11.669997146567763,
+      "acct_mape": 10.232893988929296,
+      "overall_mape": 10.951445567748529
+    },
+    "ML + LLM Ratios": {
+      "driver_mape": 11.669997146567763,
+      "acct_mape": 9.597824194929162,
+      "overall_mape": 10.633910670748463
+    },
+    "Pure LLM": {
+      "driver_mape": 18.13352471371483,
+      "acct_mape": 9.07045362051923,
+      "overall_mape": 13.60198916711703
+    }
+  },
+  "best_approach_details": {
+    "driver_mapes": {
+      "sales_revenue": 9.03356110156134,
+      "cost_of_goods_sold": 5.321593364496745,
+      "overhead_expenses": 13.15211923200566,
+      "payroll_expenses": 13.152118909757657,
+      "capex": 17.690593125017408
+    },
+    "acct_mapes": {
+      "net_income": 11.085368921538493,
+      "ebit": 10.907636018863954,
+      "total_assets": 3.6432606492712587,
+      "total_equity": 12.755031190042942
+    },
+    "avg_driver_mape": 11.669997146567763,
+    "avg_acct_mape": 9.597824194929162,
+    "overall_mape": 10.633910670748463
+  },
+  "grade": "\u2b50\u2b50\u2b50\u2b50 Very Good",
+  "llm_ratios": {
+    "gross_margin": 0.44,
+    "avg_net_income_margin": 0.26,
+    "avg_ebit_margin": 0.31,
+    "retention_ratio": -0.05,
+    "source": "LLM"
+  },
+  "llm_reasoning": "AAPL maintains strong pricing power and premium positioning. Slight margin expansion expected from services growth and operational efficiency. Negative retention ratio reflects continued aggressive capital returns via dividends and buybacks exceeding net income."
+}

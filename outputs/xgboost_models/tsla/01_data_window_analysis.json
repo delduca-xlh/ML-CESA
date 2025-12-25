@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-12-22T21:10:12.474090",
+  "ticker": "TSLA",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 19.10415116766899,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 26.440457770220213,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "70Q": {
+      "mape": 24.781076964035915,
+      "samples": 52,
+      "quarters": 70,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 19.10415116766899
+}

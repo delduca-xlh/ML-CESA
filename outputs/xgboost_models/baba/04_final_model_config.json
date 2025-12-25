@@ -1,0 +1,17 @@
+{
+  "lookback_periods": 4,
+  "n_estimators": 50,
+  "max_depth": 2,
+  "learning_rate": 0.01,
+  "subsample": 0.6,
+  "colsample_bytree": 0.6,
+  "reg_alpha": 2.0,
+  "reg_lambda": 20.0,
+  "target_variables": [
+    "sales_revenue",
+    "cost_of_goods_sold",
+    "overhead_expenses",
+    "payroll_expenses",
+    "capex"
+  ]
+}

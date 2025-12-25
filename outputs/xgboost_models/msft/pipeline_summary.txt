@@ -3,7 +3,7 @@
 PIPELINE COMPLETE FOR MSFT
 ================================================================================
 
-⏱️  Duration: 13.0 seconds
+⏱️  Duration: 8.5 seconds
 
 📊 RESULTS:
 ----------

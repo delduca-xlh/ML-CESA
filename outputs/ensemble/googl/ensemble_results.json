@@ -1,0 +1,50 @@
+{
+  "ticker": "GOOGL",
+  "timestamp": "2025-12-23T21:55:22.057587",
+  "test_periods": 8,
+  "best_approach": "Pure LLM",
+  "approach_comparison": {
+    "ML + Historical": {
+      "driver_mape": 26.645098497790976,
+      "acct_mape": 25.245608916897034,
+      "overall_mape": 25.945353707344005
+    },
+    "ML + LLM Ratios": {
+      "driver_mape": 26.645098497790976,
+      "acct_mape": 24.152023665550914,
+      "overall_mape": 25.398561081670945
+    },
+    "Pure LLM": {
+      "driver_mape": 27.701792030135188,
+      "acct_mape": 14.901103698974621,
+      "overall_mape": 21.301447864554905
+    }
+  },
+  "best_approach_details": {
+    "driver_mapes": {
+      "sales_revenue": 8.352244558394531,
+      "cost_of_goods_sold": 5.716707034466668,
+      "overhead_expenses": 61.49933905713182,
+      "payroll_expenses": 22.727556674582907,
+      "capex": 40.21311282609999
+    },
+    "acct_mapes": {
+      "net_income": 15.825795875869172,
+      "ebit": 15.622698837209564,
+      "total_assets": 13.618955798411752,
+      "total_equity": 14.536964284407993
+    },
+    "avg_driver_mape": 27.701792030135188,
+    "avg_acct_mape": 14.901103698974621,
+    "overall_mape": 21.301447864554905
+  },
+  "grade": "\u2b50\u2b50 Fair",
+  "llm_ratios": {
+    "gross_margin": 0.575,
+    "avg_net_income_margin": 0.27,
+    "avg_ebit_margin": 0.295,
+    "retention_ratio": 0.3,
+    "source": "LLM"
+  },
+  "llm_reasoning": "Modest improvement in margins driven by AI services growth and cloud scale efficiencies, offset by continued heavy AI infrastructure investments. Higher retention expected for strategic R&D and capital expenditures in competitive AI landscape."
+}

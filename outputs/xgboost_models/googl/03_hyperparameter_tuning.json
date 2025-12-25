@@ -1,31 +1,31 @@
 {
-  "timestamp": "2025-12-21T21:17:15.959656",
+  "timestamp": "2025-12-23T16:40:51.235597",
   "ticker": "GOOGL",
   "cv_results": {
     "Conservative": {
+      "mean_mape": 43.51855138028987,
+      "std_mape": 8.81637769137291
+    },
+    "Balanced": {
       "mean_mape": 32.27507642707517,
       "std_mape": 4.242077313627767
     },
-    "Balanced": {
+    "Aggressive...": {
       "mean_mape": 20.55452018387333,
       "std_mape": 5.8701316309847895
-    },
-    "Aggressive": {
-      "mean_mape": 17.601305139942173,
-      "std_mape": 6.053738161543366
     }
   },
-  "best_configuration": "Aggressive",
-  "best_cv_mape": 17.601305139942173,
+  "best_configuration": "Aggressive...",
+  "best_cv_mape": 20.55452018387333,
   "best_parameters": {
-    "n_estimators": 200,
-    "max_depth": 5,
-    "learning_rate": 0.08,
-    "subsample": 0.9,
-    "colsample_bytree": 0.9,
-    "reg_alpha": 0.2,
-    "reg_lambda": 2.0,
-    "min_child_weight": 2,
-    "gamma": 0.05
+    "n_estimators": 150,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.5,
+    "reg_lambda": 5.0,
+    "min_child_weight": 3,
+    "gamma": 0.1
   }
 }

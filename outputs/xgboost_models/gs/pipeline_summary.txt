@@ -3,7 +3,7 @@
 PIPELINE COMPLETE FOR GS
 ================================================================================
 
-⏱️  Duration: 6.4 seconds
+⏱️  Duration: 6.0 seconds
 
 📊 RESULTS:
 ----------

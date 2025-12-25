@@ -166,6 +166,10 @@ def hold_out_test_set(full_data, optimal_window, output_dir):
             'test_quarters': len(test_data)
         }, f, indent=2)
     
+    # Save development data for Part 2 to use same ratios
+    development_data.to_csv(output_dir / '03_development_data.csv', index=False)
+    print(f"  ✓ Saved development data for Part 2")
+    
     return development_data, test_data
 
 def tune_hyperparameters(ticker, development_data, output_dir):
@@ -308,6 +312,35 @@ def evaluate_on_test(forecaster, test_data, output_dir, ticker):
     
     try:
         engine = AccountingEngine(forecaster.historical_data.tail(20))
+        
+        # SAVE historical ratios for Part 2 comparison
+        # Convert to float and handle NaN/Inf for JSON serialization
+        def safe_float(val):
+            f = float(val)
+            if np.isnan(f) or np.isinf(f):
+                return 0.0
+            return f
+        
+        historical_ratios = {
+            'gross_margin': safe_float(engine.ratios.gross_margin),
+            'avg_ebit_margin': safe_float(engine.ratios.avg_ebit_margin),
+            'avg_net_income_margin': safe_float(engine.ratios.avg_net_income_margin),
+            'capex_to_revenue': safe_float(engine.ratios.capex_to_revenue),
+            'retention_ratio': safe_float(engine.ratios.retention_ratio),
+            'avg_interest_rate': safe_float(engine.ratios.avg_interest_rate),
+            'tax_rate': safe_float(engine.ratios.tax_rate),
+            'overhead_to_revenue': safe_float(engine.ratios.overhead_to_revenue),
+            'payroll_to_revenue': safe_float(engine.ratios.payroll_to_revenue),
+            'cash_to_revenue': safe_float(engine.ratios.cash_to_revenue),
+            'ar_days': safe_float(engine.ratios.ar_days),
+            'inventory_days': safe_float(engine.ratios.inventory_days),
+            'ap_days': safe_float(engine.ratios.ap_days),
+            'last_shares_outstanding': safe_float(engine.ratios.last_shares_outstanding),
+        }
+        with open(output_dir / '03_historical_ratios.json', 'w') as f:
+            json.dump(historical_ratios, f, indent=2)
+        print(f"  ✓ Saved historical ratios for Part 2")
+        
         complete_statements = engine.build_complete_statements(
             predictions=test_preds,
             periods=len(X_test)
@@ -318,6 +351,10 @@ def evaluate_on_test(forecaster, test_data, output_dir, ticker):
         # Compare MORE accounting metrics
         test_indices = test_data.index[-len(X_test):]
         actual_test = test_data.loc[test_indices]
+        
+        # SAVE test actuals for Part 2 comparison
+        actual_test.to_csv(output_dir / '04_test_actuals.csv', index=False)
+        print(f"  ✓ Saved test actuals: {len(actual_test)} periods")
         
         print(f"  {'Metric':<30s} {'Actual (Avg)':<15s} {'Predicted (Avg)':<15s} {'MAPE':<10s}")
         print(f"  " + "-"*70)
@@ -497,10 +534,10 @@ Grade: {grade}
         with open(output_dir / 'pipeline_summary.txt', 'w') as f:
             f.write(summary)
         
-        print(f"\n✅ Results in: {output_dir}/")
+        print(f"\nResults in: {output_dir}/")
         
     except Exception as e:
-        print(f"\n❌ Pipeline failed: {e}")
+        print(f"\nPipeline failed: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

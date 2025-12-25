@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-23T16:48:36.882996",
+  "ticker": "NFLX",
+  "cv_results": {
+    "Conservative": {
+      "mean_mape": 47.3817390565885,
+      "std_mape": 9.079510759050454
+    },
+    "Balanced": {
+      "mean_mape": 36.042451962731214,
+      "std_mape": 4.307012743517108
+    },
+    "Aggressive...": {
+      "mean_mape": 26.829833645886744,
+      "std_mape": 5.501586934173951
+    }
+  },
+  "best_configuration": "Aggressive...",
+  "best_cv_mape": 26.829833645886744,
+  "best_parameters": {
+    "n_estimators": 150,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.5,
+    "reg_lambda": 5.0,
+    "min_child_weight": 3,
+    "gamma": 0.1
+  }
+}

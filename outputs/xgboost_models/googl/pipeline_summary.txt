@@ -3,14 +3,14 @@
 PIPELINE COMPLETE FOR GOOGL
 ================================================================================
 
-⏱️  Duration: 9.5 seconds
+⏱️  Duration: 6.4 seconds
 
 📊 RESULTS:
 ----------
 Optimal Window:   60Q
-CV MAPE:          17.60%
-Train MAPE:       0.18%
-Test MAPE:        24.52%
+CV MAPE:          20.55%
+Train MAPE:       2.43%
+Test MAPE:        26.65%
 
 Grade: ⭐⭐⭐ Good
 

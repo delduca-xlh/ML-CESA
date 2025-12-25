@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-23T16:48:34.147914",
+  "ticker": "NFLX",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 18.784813244013726,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 17.809409627421026,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 24.0509120915982,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "95Q": {
+      "mape": 24.060145826235473,
+      "samples": 72,
+      "quarters": 95,
+      "status": "success"
+    }
+  },
+  "optimal_window": 60,
+  "optimal_mape": 17.809409627421026
+}

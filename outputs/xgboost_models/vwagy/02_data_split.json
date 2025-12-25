@@ -1,0 +1,6 @@
+{
+  "timestamp": "2025-12-22T21:08:40.365246",
+  "optimal_window": 40,
+  "development_quarters": 32,
+  "test_quarters": 8
+}

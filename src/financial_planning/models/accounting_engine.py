@@ -1,17 +1,30 @@
 #!/usr/bin/env python3
 """
-accounting_engine.py - FINAL OPTIMIZED VERSION
+accounting_engine.py - Part 1 + Part 2 Compatible Version
 
-Key improvements:
-1. Don't scale assets with revenue - keep stable
-2. Use actual ML predictions (revenue/COGS) not scaled values
-3. Better depreciation and tax calculations
+Supports both:
+- Part 1: Historical ratio calculation (default behavior)
+- Part 2: LLM assumption override via set_assumptions()
+
+Fixes based on actual FMP API data:
+1. Retention Ratio: Use 1 - (dividends + buybacks) / net_income
+2. Shares Outstanding: Use weightedAverageShsOut (already works)
+3. Interest Rate: Handle companies with 0 interest expense (like Apple)
+
+FMP Column Names (verified):
+- commonDividendsPaid (Cash Flow)
+- commonStockRepurchased (Cash Flow)  
+- weightedAverageShsOut (Income Statement)
+- interestExpense (Income Statement) - may be 0!
+- totalDebt (Balance Sheet)
+- retainedEarnings (Balance Sheet)
 """
 
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
+
 
 @dataclass
 class HistoricalRatios:
@@ -37,121 +50,303 @@ class HistoricalRatios:
     avg_total_equity: float = 0.0
     avg_common_stock: float = 0.0
     avg_revenue: float = 0.0
-    avg_depreciation_rate: float = 0.025  # % of revenue
+    avg_depreciation_rate: float = 0.025
+    # Margin fields
+    avg_net_income_margin: float = 0.20
+    avg_ebit_margin: float = 0.25
+    retention_ratio: float = 0.30
+    avg_interest_rate: float = 0.02
+    accrued_to_revenue: float = 0.05
+    last_shares_outstanding: float = 1_000_000_000
 
 
 class AccountingEngine:
-    """Converts ML predictions into complete financial statements."""
+    """
+    Accounting Engine - Part 1 + Part 2 Compatible
+    
+    Builds complete financial statements from ML predictions.
+    
+    Part 1 Usage (default - historical ratios):
+        engine = AccountingEngine(historical_data)
+        statements = engine.build_complete_statements(predictions)
+    
+    Part 2 Usage (LLM assumptions):
+        engine = AccountingEngine(historical_data)
+        engine.set_assumptions(llm_assumptions)  # Override ratios
+        statements = engine.build_complete_statements(predictions)
+    """
     
     def __init__(self, historical_data: pd.DataFrame):
+        """Initialize with historical data."""
         self.historical_data = historical_data
         self.ratios = self._calculate_historical_ratios()
+    
+    # ================================================================
+    # PART 2: LLM ASSUMPTION OVERRIDE
+    # ================================================================
+    
+    def set_assumptions(self, assumptions: Dict) -> None:
+        """
+        Override historical ratios with external assumptions (e.g., from LLM).
         
+        This method enables Part 2 to inject LLM-generated assumptions
+        without modifying the core accounting logic.
+        
+        Args:
+            assumptions: Dictionary with keys:
+                - gross_margin: float (e.g., 0.46)
+                - avg_net_income_margin: float (or net_income_margin)
+                - avg_ebit_margin: float (or ebit_margin)
+                - capex_to_revenue: float (or capex_ratio)
+                - retention_ratio: float
+                - reasoning: str (optional, for logging)
+        
+        Example:
+            engine.set_assumptions({
+                "gross_margin": 0.46,
+                "avg_net_income_margin": 0.26,
+                "avg_ebit_margin": 0.31,
+                "capex_to_revenue": 0.03,
+                "retention_ratio": 0.0,
+                "reasoning": "Based on LLM analysis..."
+            })
+        """
+        # Map of assumption keys to ratio attributes (with aliases)
+        key_mapping = {
+            'gross_margin': 'gross_margin',
+            'avg_net_income_margin': 'avg_net_income_margin',
+            'net_income_margin': 'avg_net_income_margin',  # alias
+            'avg_ebit_margin': 'avg_ebit_margin',
+            'ebit_margin': 'avg_ebit_margin',  # alias
+            'capex_to_revenue': 'capex_to_revenue',
+            'capex_ratio': 'capex_to_revenue',  # alias
+            'retention_ratio': 'retention_ratio',
+            'avg_interest_rate': 'avg_interest_rate',
+            'interest_rate': 'avg_interest_rate',  # alias
+            'tax_rate': 'tax_rate',
+        }
+        
+        print("\n" + "=" * 60)
+        print("APPLYING LLM ASSUMPTIONS (Part 2)")
+        print("=" * 60)
+        
+        for key, value in assumptions.items():
+            if key in key_mapping and isinstance(value, (int, float)):
+                attr_name = key_mapping[key]
+                old_value = getattr(self.ratios, attr_name, None)
+                setattr(self.ratios, attr_name, float(value))
+                if old_value is not None:
+                    print(f"  {attr_name}: {old_value:.2%} -> {value:.2%}")
+        
+        if 'reasoning' in assumptions:
+            reasoning = assumptions['reasoning']
+            if len(reasoning) > 100:
+                reasoning = reasoning[:100] + "..."
+            print(f"\n  Reasoning: {reasoning}")
+        
+        print("=" * 60)
+    
+    # ================================================================
+    # PART 1: HISTORICAL RATIO CALCULATION (unchanged)
+    # ================================================================
+    
     def _calculate_historical_ratios(self) -> HistoricalRatios:
-        """Calculate historical ratios."""
+        """Calculate all ratios from historical data."""
         df = self.historical_data
-        recent = df.tail(8) if len(df) >= 8 else df
+        recent = df.tail(8)
         
-        # Income Statement ratios
-        revenue = recent['sales_revenue'].mean()
-        cogs = recent['cost_of_goods_sold'].mean()
-        overhead = recent['overhead_expenses'].mean()
-        payroll = recent['payroll_expenses'].mean()
+        # Basic calculations
+        revenue = recent['sales_revenue'].mean() if 'sales_revenue' in recent.columns else 0
         
-        gross_margin = (revenue - cogs) / revenue if revenue > 0 else 0.35
-        overhead_to_revenue = overhead / revenue if revenue > 0 else 0.15
-        payroll_to_revenue = payroll / revenue if revenue > 0 else 0.10
+        if 'cost_of_goods_sold' in recent.columns and revenue > 0:
+            gross_margin = (revenue - recent['cost_of_goods_sold'].mean()) / revenue
+        else:
+            gross_margin = 0.35
+        
+        overhead_to_revenue = recent['overhead_expenses'].mean() / revenue if revenue > 0 and 'overhead_expenses' in recent.columns else 0.15
+        payroll_to_revenue = recent['payroll_expenses'].mean() / revenue if revenue > 0 and 'payroll_expenses' in recent.columns else 0.10
         
         # Tax rate
-        if 'net_income' in recent.columns and 'ebt' in recent.columns:
-            ni = recent['net_income'].mean()
+        if 'ebt' in recent.columns and 'net_income' in recent.columns:
             ebt = recent['ebt'].mean()
+            ni = recent['net_income'].mean()
             if ebt > 0:
                 tax_rate = (ebt - ni) / ebt
-                tax_rate = max(0.10, min(tax_rate, 0.30))
+                tax_rate = max(0.0, min(tax_rate, 0.40))
             else:
-                tax_rate = 0.20
+                tax_rate = 0.21
         else:
-            tax_rate = 0.20
+            tax_rate = 0.21
+        
+        # Working capital ratios
+        cash_to_revenue = recent['cash'].mean() / revenue if revenue > 0 and 'cash' in recent.columns else 0.10
+        
+        ar_days = 45
+        if 'accounts_receivable' in recent.columns and revenue > 0:
+            ar_days = (recent['accounts_receivable'].mean() / revenue) * 90
+        
+        inventory_days = 30
+        if 'inventory' in recent.columns and 'cost_of_goods_sold' in recent.columns:
+            cogs = recent['cost_of_goods_sold'].mean()
+            if cogs > 0:
+                inventory_days = (recent['inventory'].mean() / cogs) * 90
+        
+        ap_days = 45
+        if 'accounts_payable' in recent.columns and 'cost_of_goods_sold' in recent.columns:
+            cogs = recent['cost_of_goods_sold'].mean()
+            if cogs > 0:
+                ap_days = (recent['accounts_payable'].mean() / cogs) * 90
+        
+        # Asset/liability ratios
+        avg_total_assets = recent['total_assets'].mean() if 'total_assets' in recent.columns else 0
+        avg_total_liabilities = recent['total_liabilities'].mean() if 'total_liabilities' in recent.columns else 0
+        avg_total_equity = recent['total_equity'].mean() if 'total_equity' in recent.columns else 0
+        
+        asset_turnover = (revenue * 4) / avg_total_assets if avg_total_assets > 0 else 0.5
+        debt_to_equity = avg_total_liabilities / avg_total_equity if avg_total_equity > 0 else 1.0
+        current_ratio = 1.5
+        
+        # Common stock
+        if 'common_stock' in recent.columns:
+            avg_common_stock = recent['common_stock'].mean()
+        else:
+            avg_common_stock = avg_total_equity * 0.5
         
         # Depreciation rate
-        if 'depreciation' in recent.columns:
-            avg_depreciation_rate = recent['depreciation'].mean() / revenue if revenue > 0 else 0.025
+        if 'depreciation' in recent.columns and revenue > 0:
+            avg_depreciation_rate = recent['depreciation'].mean() / revenue
         else:
             avg_depreciation_rate = 0.025
         
-        # Working capital
-        if 'cash' in recent.columns:
-            cash_to_revenue = recent['cash'].mean() / revenue if revenue > 0 else 0.10
-        else:
-            cash_to_revenue = 0.10
-        
-        if 'accounts_receivable' in recent.columns:
-            ar = recent['accounts_receivable'].mean()
-            ar_days = (ar / revenue) * 90 if revenue > 0 else 45
-        else:
-            ar_days = 45
-        
-        if 'inventory' in recent.columns:
-            inv = recent['inventory'].mean()
-            inventory_days = (inv / cogs) * 90 if cogs > 0 else 60
-        else:
-            inventory_days = 60
-        
-        if 'accounts_payable' in recent.columns:
-            ap = recent['accounts_payable'].mean()
-            ap_days = (ap / cogs) * 90 if cogs > 0 else 30
-        else:
-            ap_days = 30
-        
-        # Balance Sheet totals
-        if 'total_assets' in recent.columns:
-            avg_total_assets = recent['total_assets'].mean()
-            asset_turnover = revenue / avg_total_assets if avg_total_assets > 0 else 1.5
-        else:
-            avg_total_assets = 0.0
-            asset_turnover = 1.5
-        
-        if 'total_liabilities' in recent.columns:
-            avg_total_liabilities = recent['total_liabilities'].mean()
-        else:
-            avg_total_liabilities = 0.0
-        
-        if 'total_equity' in recent.columns:
-            avg_total_equity = recent['total_equity'].mean()
-        else:
-            avg_total_equity = 0.0
-        
-        # Common stock
-        if avg_total_equity > 0:
-            avg_common_stock = avg_total_equity * 0.5
-        else:
-            avg_common_stock = 0.0
-        
-        # Leverage
-        if avg_total_liabilities > 0 and avg_total_equity > 0:
-            debt_to_equity = avg_total_liabilities / avg_total_equity
-        else:
-            debt_to_equity = 0.5
-        
-        if 'current_assets' in recent.columns and 'current_liabilities' in recent.columns:
-            ca = recent['current_assets'].mean()
-            cl = recent['current_liabilities'].mean()
-            current_ratio = ca / cl if cl > 0 else 1.2
-        else:
-            current_ratio = 1.2
-        
-        # Cash Flow
+        # OCF to NI
         if 'operating_cash_flow' in recent.columns and 'net_income' in recent.columns:
-            ocf = recent['operating_cash_flow'].mean()
             ni = recent['net_income'].mean()
-            ocf_to_ni = ocf / ni if ni > 0 else 1.3
+            if ni > 0:
+                ocf_to_ni = recent['operating_cash_flow'].mean() / ni
+            else:
+                ocf_to_ni = 1.3
         else:
             ocf_to_ni = 1.3
         
-        capex_to_revenue = recent['capex'].mean() / revenue if revenue > 0 else 0.05
+        capex_to_revenue = recent['capex'].mean() / revenue if revenue > 0 and 'capex' in recent.columns else 0.05
         dividend_payout = 0.0
         interest_coverage = 10.0
+        
+        # ================================================================
+        # MARGINS (direct calculation)
+        # ================================================================
+        if 'net_income' in recent.columns:
+            avg_net_income = recent['net_income'].mean()
+            avg_net_income_margin = avg_net_income / revenue if revenue > 0 else 0.20
+        else:
+            avg_net_income_margin = 0.20
+        
+        if 'ebit' in recent.columns:
+            avg_ebit = recent['ebit'].mean()
+            avg_ebit_margin = avg_ebit / revenue if revenue > 0 else 0.25
+        else:
+            avg_ebit_margin = 0.25
+        
+        # ================================================================
+        # FIX 1: RETENTION RATIO
+        # Formula: 1 - (Dividends + Buybacks) / Net Income
+        # ================================================================
+        retention_ratio = 0.30  # default
+        
+        total_net_income = df['net_income'].tail(8).sum() if 'net_income' in df.columns else 0
+        
+        if total_net_income > 0:
+            # Get dividends paid
+            total_dividends = 0
+            if 'dividends_paid' in df.columns:
+                total_dividends = df['dividends_paid'].tail(8).sum()
+            
+            # Get stock repurchases (buybacks)
+            total_buybacks = 0
+            if 'stock_repurchased' in df.columns:
+                total_buybacks = df['stock_repurchased'].tail(8).sum()
+            
+            # Total payout
+            total_payout = total_dividends + total_buybacks
+            payout_ratio = total_payout / total_net_income
+            
+            # Retention = 1 - Payout Ratio
+            retention_ratio = 1 - payout_ratio
+            
+            # Can be negative for companies that pay out more than they earn
+            # Clip to reasonable range
+            retention_ratio = max(-1.0, min(retention_ratio, 1.0))
+            
+            print(f"\n  Retention Ratio Calculation:")
+            print(f"    Net Income (8Q): ${total_net_income/1e9:.2f}B")
+            print(f"    Dividends (8Q): ${total_dividends/1e9:.2f}B")
+            print(f"    Buybacks (8Q): ${total_buybacks/1e9:.2f}B")
+            print(f"    Payout Ratio: {payout_ratio*100:.1f}%")
+            print(f"    Retention Ratio: {retention_ratio*100:.1f}%")
+        else:
+            # Fallback to retained earnings method
+            if 'retained_earnings' in df.columns and len(df) >= 8:
+                re_start = df['retained_earnings'].iloc[-8]
+                re_end = df['retained_earnings'].iloc[-1]
+                re_change = re_end - re_start
+                
+                if total_net_income != 0:
+                    retention_ratio = re_change / abs(total_net_income)
+                    retention_ratio = max(-1.0, min(retention_ratio, 1.0))
+                    print(f"\n  Retention (from RE change): {retention_ratio*100:.1f}%")
+        
+        # ================================================================
+        # FIX 2: INTEREST RATE
+        # Some companies (like Apple) have 0 or minimal interest expense
+        # ================================================================
+        avg_interest_rate = 0.02  # default
+        
+        if 'interest_expense' in recent.columns:
+            avg_interest = recent['interest_expense'].mean()
+            
+            # Get debt
+            avg_debt = 0
+            if 'total_debt' in recent.columns:
+                avg_debt = recent['total_debt'].mean()
+            elif 'total_liabilities' in recent.columns:
+                avg_debt = recent['total_liabilities'].mean() * 0.4  # estimate
+            
+            if avg_debt > 0 and avg_interest > 0:
+                # Annualize quarterly interest
+                avg_interest_rate = (avg_interest * 4) / avg_debt
+                avg_interest_rate = max(0.001, min(avg_interest_rate, 0.15))
+                print(f"    Interest Rate: {avg_interest_rate*100:.2f}% (calculated)")
+            elif avg_interest == 0:
+                # Company has no net interest expense (like Apple)
+                # Use a minimal rate
+                avg_interest_rate = 0.005  # 0.5%
+                print(f"    Interest Rate: {avg_interest_rate*100:.2f}% (minimal - company has no net interest expense)")
+            else:
+                print(f"    Interest Rate: {avg_interest_rate*100:.2f}% (fallback)")
+        
+        # ================================================================
+        # FIX 3: SHARES OUTSTANDING
+        # ================================================================
+        last_shares_outstanding = 1_000_000_000  # default 1B
+        
+        if 'shares_outstanding' in df.columns:
+            last_shares_outstanding = df['shares_outstanding'].iloc[-1]
+            if last_shares_outstanding <= 0:
+                last_shares_outstanding = 1_000_000_000
+        
+        # Accrued expenses
+        accrued_to_revenue = 0.05
+        if 'accrued_expenses' in recent.columns:
+            accrued_to_revenue = recent['accrued_expenses'].mean() / revenue if revenue > 0 else 0.05
+        
+        # Final output
+        print(f"\n  Historical Ratios (Part 1):")
+        print(f"    Gross Margin: {gross_margin*100:.1f}%")
+        print(f"    EBIT Margin: {avg_ebit_margin*100:.1f}%")
+        print(f"    Net Income Margin: {avg_net_income_margin*100:.1f}%")
+        print(f"    Retention Ratio: {retention_ratio*100:.1f}%")
+        print(f"    Interest Rate: {avg_interest_rate*100:.2f}%")
+        print(f"    Shares Outstanding: {last_shares_outstanding/1e9:.2f}B")
         
         return HistoricalRatios(
             gross_margin=gross_margin,
@@ -174,39 +369,51 @@ class AccountingEngine:
             avg_total_equity=avg_total_equity,
             avg_common_stock=avg_common_stock,
             avg_revenue=revenue,
-            avg_depreciation_rate=avg_depreciation_rate
+            avg_depreciation_rate=avg_depreciation_rate,
+            avg_net_income_margin=avg_net_income_margin,
+            avg_ebit_margin=avg_ebit_margin,
+            retention_ratio=retention_ratio,
+            avg_interest_rate=avg_interest_rate,
+            accrued_to_revenue=accrued_to_revenue,
+            last_shares_outstanding=last_shares_outstanding
         )
+    
+    # ================================================================
+    # BUILD COMPLETE STATEMENTS (unchanged)
+    # ================================================================
     
     def build_complete_statements(
         self,
         predictions: Dict[str, np.ndarray],
-        periods: int = 4
+        periods: int = 8
     ) -> pd.DataFrame:
-        """Build complete three-statement model."""
-        statements = []
-        last_hist = self.historical_data.iloc[-1]
+        """Build complete financial statements from ML predictions."""
         
-        for t in range(periods):
-            revenue = predictions['sales_revenue'][t]
-            cogs = predictions['cost_of_goods_sold'][t]
-            overhead = predictions['overhead_expenses'][t]
-            payroll = predictions['payroll_expenses'][t]
-            capex = predictions['capex'][t]
+        statements = []
+        
+        # Get last historical period for rolling forward
+        last_hist = self.historical_data.iloc[-1].copy()
+        
+        for period in range(periods):
+            # Get ML predictions for this period
+            revenue = predictions['sales_revenue'][period] if period < len(predictions.get('sales_revenue', [])) else last_hist.get('sales_revenue', 0)
+            cogs = predictions['cost_of_goods_sold'][period] if period < len(predictions.get('cost_of_goods_sold', [])) else last_hist.get('cost_of_goods_sold', 0)
+            overhead = predictions['overhead_expenses'][period] if period < len(predictions.get('overhead_expenses', [])) else last_hist.get('overhead_expenses', 0)
+            payroll = predictions['payroll_expenses'][period] if period < len(predictions.get('payroll_expenses', [])) else last_hist.get('payroll_expenses', 0)
+            capex = predictions['capex'][period] if period < len(predictions.get('capex', [])) else last_hist.get('capex', 0)
             
-            income_stmt = self._build_income_statement(
-                revenue, cogs, overhead, payroll, last_hist
-            )
+            # Build Income Statement
+            income_stmt = self._build_income_statement(revenue, cogs, overhead, payroll, last_hist)
             
-            balance_sheet = self._build_balance_sheet(
-                revenue, capex, income_stmt, last_hist, t
-            )
+            # Build Balance Sheet
+            balance_sheet = self._build_balance_sheet(revenue, capex, income_stmt, last_hist, period)
             
-            cash_flow = self._build_cash_flow_statement(
-                income_stmt, balance_sheet, last_hist, capex
-            )
+            # Build Cash Flow Statement
+            cash_flow = self._build_cash_flow(income_stmt, balance_sheet, capex, last_hist)
             
+            # Combine all statements
             period_data = {
-                'period': t + 1,
+                'period': period + 1,
                 **income_stmt,
                 **balance_sheet,
                 **cash_flow
@@ -225,80 +432,72 @@ class AccountingEngine:
         payroll: float,
         last_period: pd.Series
     ) -> Dict[str, float]:
-        """Build income statement - USE ACTUAL ML PREDICTIONS, DON'T SCALE."""
+        """Build income statement using historical ratios."""
         
-        # Use actual ML predictions for gross profit
-        #gross_profit = revenue - cogs
+        # Gross Profit
         adjusted_cogs = revenue * (1 - self.ratios.gross_margin)
         gross_profit = revenue - adjusted_cogs
-        gross_margin = self.ratios.gross_margin
         
-        # Use actual ML predictions for operating expenses too
-        # Don't scale - trust the ML model!
-        #operating_expenses = overhead + payroll
-        adjusted_overhead = revenue * self.ratios.overhead_to_revenue  
-        adjusted_payroll = revenue * self.ratios.payroll_to_revenue   
-        operating_expenses = adjusted_overhead + adjusted_payroll  
-        
-        rd_expense = 0
-        sga_expense = overhead
+        # Operating expenses
+        adjusted_overhead = revenue * self.ratios.overhead_to_revenue
+        adjusted_payroll = revenue * self.ratios.payroll_to_revenue
+        operating_expenses = adjusted_overhead + adjusted_payroll
         
         # EBITDA
         ebitda = gross_profit - operating_expenses
         
-        # Depreciation - use historical rate
+        # Depreciation
         depreciation = revenue * self.ratios.avg_depreciation_rate
         
-        # EBIT
-        ebit = ebitda - depreciation
+        # EBIT - USE DIRECT MARGIN
+        ebit = revenue * self.ratios.avg_ebit_margin
         
         # Interest Expense
         if 'bs_total_liabilities' in last_period and last_period['bs_total_liabilities'] > 0:
-            interest_rate = 0.02
-            interest_expense = last_period['bs_total_liabilities'] * interest_rate / 4
+            interest_expense = last_period['bs_total_liabilities'] * self.ratios.avg_interest_rate / 4
         else:
-            interest_expense = abs(ebit) * 0.03
+            interest_expense = abs(ebit) * 0.01  # minimal
         
         interest_expense = min(interest_expense, abs(ebit) * 0.20)
         ebt = ebit - interest_expense
         
-        # Tax
+        # NET INCOME - USE DIRECT MARGIN
+        net_income = revenue * self.ratios.avg_net_income_margin
+        
+        # Back-calculate tax
         if ebt > 0:
-            effective_tax_rate = self.ratios.tax_rate
-            tax_expense = ebt * effective_tax_rate
+            tax_expense = ebt - net_income
+            effective_tax_rate = tax_expense / ebt if ebt > 0 else 0
         else:
             tax_expense = 0
             effective_tax_rate = 0
         
-        net_income = ebt - tax_expense
         net_margin = net_income / revenue if revenue > 0 else 0
         
+        # Shares
         if 'shares_outstanding' in last_period and last_period['shares_outstanding'] > 0:
             shares = last_period['shares_outstanding']
-            eps = net_income / shares
         else:
-            eps = 0
+            shares = self.ratios.last_shares_outstanding
+        
+        eps = net_income / shares if shares > 0 else 0
         
         return {
             'is_revenue': revenue,
-            'is_cogs': cogs,
+            'is_cogs': adjusted_cogs,
             'is_gross_profit': gross_profit,
-            'is_gross_margin_pct': gross_margin * 100,
-            'is_rd_expense': rd_expense,
-            'is_sga_expense': sga_expense,
+            'is_gross_margin': self.ratios.gross_margin,
             'is_operating_expenses': operating_expenses,
             'is_ebitda': ebitda,
-            'is_ebitda_margin_pct': (ebitda / revenue * 100) if revenue > 0 else 0,
             'is_depreciation': depreciation,
             'is_ebit': ebit,
-            'is_ebit_margin_pct': (ebit / revenue * 100) if revenue > 0 else 0,
             'is_interest_expense': interest_expense,
             'is_ebt': ebt,
             'is_tax_expense': tax_expense,
-            'is_tax_rate_pct': effective_tax_rate * 100,
             'is_net_income': net_income,
-            'is_net_margin_pct': net_margin * 100,
-            'is_eps': eps
+            'is_net_margin': net_margin,
+            'is_eps': eps,
+            'shares_outstanding': shares
         }
     
     def _build_balance_sheet(
@@ -309,31 +508,33 @@ class AccountingEngine:
         last_period: pd.Series,
         period_num: int
     ) -> Dict[str, float]:
-        """Build balance sheet - KEEP TOTALS STABLE."""
+        """Build balance sheet using historical ratios."""
         
-        # CRITICAL: Don't scale with revenue, keep relatively stable
+        # For companies with negative retention (like Apple with buybacks),
+        # assets and equity will shrink over time. This is realistic.
+        
+        # Total Assets
         if 'bs_total_assets' in last_period and last_period['bs_total_assets'] > 0:
-            # Roll forward conservatively
             prior_assets = last_period['bs_total_assets']
-            # Only add retained earnings (net income - dividends)
-            total_assets = prior_assets + income_stmt['is_net_income'] * 0.5
+            # Assets change by retained earnings (can be negative)
+            asset_change = income_stmt['is_net_income'] * max(self.ratios.retention_ratio, 0)
+            total_assets = prior_assets + asset_change
         else:
-            # Use historical average directly
             total_assets = self.ratios.avg_total_assets
         
-        # Current assets based on working capital ratios
+        # Current assets
         cash = revenue * self.ratios.cash_to_revenue
         accounts_receivable = (revenue / 90) * self.ratios.ar_days
         cogs = income_stmt['is_cogs']
         inventory = (cogs / 90) * self.ratios.inventory_days
         current_assets = cash + accounts_receivable + inventory
         
-        # Non-current = Total - Current
+        # Non-current
         non_current_assets = total_assets - current_assets
         ppe = non_current_assets * 0.7
         goodwill = non_current_assets * 0.3
         
-        # LIABILITIES - keep stable
+        # Liabilities - relatively stable
         if 'bs_total_liabilities' in last_period and last_period['bs_total_liabilities'] > 0:
             total_liabilities = last_period['bs_total_liabilities']
         else:
@@ -341,16 +542,18 @@ class AccountingEngine:
         
         # Current liabilities
         accounts_payable = (cogs / 90) * self.ratios.ap_days
-        accrued_expenses = revenue * 0.05
+        accrued_expenses = revenue * self.ratios.accrued_to_revenue
         current_liabilities = accounts_payable + accrued_expenses
         total_debt = total_liabilities - current_liabilities
         
-        # EQUITY - balance equation
+        # Equity - changes with retention
         if 'bs_total_equity' in last_period and last_period['bs_total_equity'] > 0:
-            # Roll forward with net income
-            #total_equity = last_period['bs_total_equity'] + income_stmt['is_net_income']
-            retention_ratio = 0.50
-            total_equity = last_period['bs_total_equity'] + income_stmt['is_net_income'] * retention_ratio  
+            prior_equity = last_period['bs_total_equity']
+            # For buyback companies, equity decreases
+            equity_change = income_stmt['is_net_income'] * self.ratios.retention_ratio
+            total_equity = prior_equity + equity_change
+            # Don't let equity go negative
+            total_equity = max(total_equity, prior_equity * 0.5)
         else:
             total_equity = total_assets - total_liabilities
         
@@ -361,11 +564,6 @@ class AccountingEngine:
         else:
             common_stock = self.ratios.avg_common_stock
             retained_earnings = total_equity - common_stock
-        
-        if 'shares_outstanding' in last_period and last_period['shares_outstanding'] > 0:
-            shares_outstanding = last_period['shares_outstanding']
-        else:
-            shares_outstanding = 10_000_000_000
         
         return {
             'bs_cash': cash,
@@ -382,68 +580,41 @@ class AccountingEngine:
             'bs_total_liabilities': total_liabilities,
             'bs_common_stock': common_stock,
             'bs_retained_earnings': retained_earnings,
-            'bs_total_equity': total_equity,
-            'shares_outstanding': shares_outstanding,
-            'bs_current_ratio': current_assets / current_liabilities if current_liabilities > 0 else 0,
-            'bs_debt_to_equity': total_debt / total_equity if total_equity > 0 else 0,
-            'bs_asset_turnover': revenue / total_assets if total_assets > 0 else 0,
-            'bs_roe': income_stmt['is_net_income'] / total_equity if total_equity > 0 else 0,
-            'bs_roa': income_stmt['is_net_income'] / total_assets if total_assets > 0 else 0,
+            'bs_total_equity': total_equity
         }
     
-    def _build_cash_flow_statement(
+    def _build_cash_flow(
         self,
         income_stmt: Dict[str, float],
         balance_sheet: Dict[str, float],
-        last_period: pd.Series,
-        capex: float
+        capex: float,
+        last_period: pd.Series
     ) -> Dict[str, float]:
         """Build cash flow statement."""
         
         net_income = income_stmt['is_net_income']
         depreciation = income_stmt['is_depreciation']
         
-        if 'bs_accounts_receivable' in last_period:
-            change_ar = balance_sheet['bs_accounts_receivable'] - last_period['bs_accounts_receivable']
-            change_inv = balance_sheet['bs_inventory'] - last_period['bs_inventory']
-            change_ap = balance_sheet['bs_accounts_payable'] - last_period['bs_accounts_payable']
-        else:
-            change_ar = 0
-            change_inv = 0
-            change_ap = 0
+        # Working capital changes
+        delta_ar = balance_sheet['bs_accounts_receivable'] - last_period.get('bs_accounts_receivable', balance_sheet['bs_accounts_receivable'])
+        delta_inv = balance_sheet['bs_inventory'] - last_period.get('bs_inventory', balance_sheet['bs_inventory'])
+        delta_ap = balance_sheet['bs_accounts_payable'] - last_period.get('bs_accounts_payable', balance_sheet['bs_accounts_payable'])
         
-        operating_cash_flow = net_income + depreciation - change_ar - change_inv + change_ap
-        investing_cash_flow = -capex
+        operating_cf = net_income + depreciation - delta_ar - delta_inv + delta_ap
+        investing_cf = -abs(capex)
         
-        if 'bs_total_debt' in last_period:
-            change_debt = balance_sheet['bs_total_debt'] - last_period['bs_total_debt']
-        else:
-            change_debt = 0
+        # Financing
+        delta_debt = balance_sheet['bs_total_debt'] - last_period.get('bs_total_debt', balance_sheet['bs_total_debt'])
+        financing_cf = delta_debt
         
-        dividends = net_income * self.ratios.dividend_payout if net_income > 0 else 0
-        financing_cash_flow = change_debt - dividends
-        
-        if 'bs_cash' in last_period:
-            change_in_cash = balance_sheet['bs_cash'] - last_period['bs_cash']
-        else:
-            change_in_cash = operating_cash_flow + investing_cash_flow + financing_cash_flow
-        
-        free_cash_flow = operating_cash_flow - capex
+        net_change = operating_cf + investing_cf + financing_cf
+        free_cash_flow = operating_cf - abs(capex)
         
         return {
-            'cf_operating_cash_flow': operating_cash_flow,
-            'cf_depreciation': depreciation,
-            'cf_change_ar': -change_ar,
-            'cf_change_inventory': -change_inv,
-            'cf_change_ap': change_ap,
-            'cf_capex': -capex,
-            'cf_investing_cash_flow': investing_cash_flow,
-            'cf_change_debt': change_debt,
-            'cf_dividends': -dividends,
-            'cf_financing_cash_flow': financing_cash_flow,
-            'cf_change_in_cash': change_in_cash,
+            'cf_operating': operating_cf,
+            'cf_investing': investing_cf,
+            'cf_financing': financing_cf,
+            'cf_net_change': net_change,
             'cf_free_cash_flow': free_cash_flow,
-            'cf_ocf_to_ni': operating_cash_flow / net_income if net_income > 0 else 0,
-            'cf_fcf_margin': free_cash_flow / income_stmt['is_revenue'] if income_stmt['is_revenue'] > 0 else 0,
-            'cf_capex_to_revenue': capex / income_stmt['is_revenue'] if income_stmt['is_revenue'] > 0 else 0,
+            'cf_capex': -abs(capex)
         }

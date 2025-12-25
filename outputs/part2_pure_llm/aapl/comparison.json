@@ -1,0 +1,44 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2025-12-23T17:05:35.730938",
+  "driver_mapes": {
+    "ml": {
+      "Revenue": 9.03356110156134,
+      "COGS": 5.321593364496745,
+      "Overhead": 13.15211923200566,
+      "Payroll": 13.152118909757657,
+      "CapEx": 17.690593125017408
+    },
+    "llm": {
+      "Revenue": 6.221421138681454,
+      "COGS": 4.608768990550487,
+      "Overhead": 13.395097036418429,
+      "Payroll": 5.0005146386518,
+      "CapEx": 20.72280823454625
+    }
+  },
+  "accounting_mapes": {
+    "ml": {
+      "Net Income": 13.45199678209575,
+      "EBIT": 13.613754015248173,
+      "Total Assets": 3.6432606492712587,
+      "Total Equity": 10.222564509102003
+    },
+    "llm": {
+      "Net Income": 9.95594065382484,
+      "EBIT": 9.051137191591213,
+      "Total Assets": 9.573295078194487,
+      "Total Equity": 7.846123999943785
+    }
+  },
+  "summary": {
+    "ml_driver_avg": 11.669997146567763,
+    "llm_driver_avg": 9.989722007769684,
+    "ml_accounting_avg": 10.232893988929296,
+    "llm_accounting_avg": 9.106624230888581,
+    "driver_winner": "LLM",
+    "accounting_winner": "LLM",
+    "overall_winner": "LLM"
+  },
+  "llm_reasoning": "Projections reflect Apple's strong seasonal Q1 pattern (holiday iPhone sales), followed by typical sequential decline in Q2-Q3, with Q4 recovery ahead of new product launches. Slight revenue growth year-over-year driven by Services expansion and emerging market penetration, while maintaining historical gross margin profile around 43-44%. Balance sheet growth reflects continued cash generation and strategic investments."
+}

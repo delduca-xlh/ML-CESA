@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-22T21:07:50.977533",
+  "ticker": "BABA",
+  "cv_results": {
+    "Conservative": {
+      "mean_mape": Infinity,
+      "std_mape": NaN
+    },
+    "Balanced": {
+      "mean_mape": Infinity,
+      "std_mape": NaN
+    },
+    "Aggressive...": {
+      "mean_mape": Infinity,
+      "std_mape": NaN
+    }
+  },
+  "best_configuration": "Conservative",
+  "best_cv_mape": Infinity,
+  "best_parameters": {
+    "n_estimators": 50,
+    "max_depth": 2,
+    "learning_rate": 0.01,
+    "subsample": 0.6,
+    "colsample_bytree": 0.6,
+    "reg_alpha": 2.0,
+    "reg_lambda": 20.0,
+    "min_child_weight": 10,
+    "gamma": 0.5
+  }
+}

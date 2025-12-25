@@ -3,7 +3,7 @@
 PIPELINE COMPLETE FOR AMZN
 ================================================================================
 
-⏱️  Duration: 6.7 seconds
+⏱️  Duration: 5.6 seconds
 
 📊 RESULTS:
 ----------

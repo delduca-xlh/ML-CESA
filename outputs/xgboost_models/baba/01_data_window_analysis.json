@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-12-22T21:07:48.626090",
+  "ticker": "BABA",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": Infinity,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "50Q": {
+      "mape": Infinity,
+      "samples": 36,
+      "quarters": 50,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": Infinity
+}

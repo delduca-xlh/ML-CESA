@@ -1,21 +1,21 @@
 {
-  "timestamp": "2025-12-21T20:56:24.317317",
+  "timestamp": "2025-12-22T21:09:24.158004",
   "ticker": "MSFT",
   "cv_results": {
     "Conservative": {
+      "mean_mape": 26.92945648379896,
+      "std_mape": 7.517233842598173
+    },
+    "Balanced": {
       "mean_mape": 20.398653644437093,
       "std_mape": 3.531772969526903
     },
-    "Balanced": {
+    "Aggressive...": {
       "mean_mape": 15.221355206449639,
       "std_mape": 3.0617011122152586
-    },
-    "Aggressive": {
-      "mean_mape": 15.483885367952226,
-      "std_mape": 3.286498650146103
     }
   },
-  "best_configuration": "Balanced",
+  "best_configuration": "Aggressive...",
   "best_cv_mape": 15.221355206449639,
   "best_parameters": {
     "n_estimators": 150,

@@ -1,0 +1,5 @@
+{
+  "company_ticker": "NFLX",
+  "model_type": "xgboost",
+  "trained": true
+}

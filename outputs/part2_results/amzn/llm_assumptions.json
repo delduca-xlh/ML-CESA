@@ -1,0 +1,10 @@
+{
+  "gross_margin": 0.47,
+  "avg_net_income_margin": 0.065,
+  "avg_ebit_margin": 0.085,
+  "capex_to_revenue": 0.09,
+  "retention_ratio": 0.85,
+  "reasoning": "Gross margins stabilizing around 47% as AWS mix benefits offset retail pressure. EBIT margins continuing upward trajectory from 7.8% to ~8.5% driven by operating leverage and AWS growth. Net margins improving to 6.5% as operational efficiency gains persist. CapEx moderating to 9% of revenue as infrastructure investments become more targeted, particularly around AI capabilities. Retention ratio of 85% reflects Amazon's continued reinvestment focus with minimal shareholder returns, slightly higher than historical 80.9% due to improved profitability providing more capital for growth initiatives.",
+  "source": "LLM",
+  "ticker": "AMZN"
+}

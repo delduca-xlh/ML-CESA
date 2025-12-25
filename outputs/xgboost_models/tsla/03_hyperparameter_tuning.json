@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-22T21:10:14.914509",
+  "ticker": "TSLA",
+  "cv_results": {
+    "Conservative": {
+      "mean_mape": 45.393717077295186,
+      "std_mape": 10.466445794477458
+    },
+    "Balanced": {
+      "mean_mape": 37.710746612258276,
+      "std_mape": 10.04624113257418
+    },
+    "Aggressive...": {
+      "mean_mape": 25.859335999360063,
+      "std_mape": 8.960986043896183
+    }
+  },
+  "best_configuration": "Aggressive...",
+  "best_cv_mape": 25.859335999360063,
+  "best_parameters": {
+    "n_estimators": 150,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.5,
+    "reg_lambda": 5.0,
+    "min_child_weight": 3,
+    "gamma": 0.1
+  }
+}

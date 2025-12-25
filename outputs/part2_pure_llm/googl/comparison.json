@@ -1,0 +1,44 @@
+{
+  "ticker": "GOOGL",
+  "timestamp": "2025-12-23T17:04:06.840740",
+  "driver_mapes": {
+    "ml": {
+      "Revenue": 23.86288139652595,
+      "COGS": 19.62453889445925,
+      "Overhead": 19.601612250643846,
+      "Payroll": 19.601612250643846,
+      "CapEx": 50.53484769668197
+    },
+    "llm": {
+      "Revenue": 13.331022819756283,
+      "COGS": 11.993070064429354,
+      "Overhead": 62.64859123160289,
+      "Payroll": 45.34994183796585,
+      "CapEx": 20.375675079551186
+    }
+  },
+  "accounting_mapes": {
+    "ml": {
+      "Net Income": 31.671076062703595,
+      "EBIT": 29.89773981102485,
+      "Total Assets": 19.585689711749307,
+      "Total Equity": 19.827930082110377
+    },
+    "llm": {
+      "Net Income": 25.238955229320748,
+      "EBIT": 24.352574072485556,
+      "Total Assets": 15.876762375820523,
+      "Total Equity": 18.017399020686764
+    }
+  },
+  "summary": {
+    "ml_driver_avg": 26.645098497790976,
+    "llm_driver_avg": 30.739660206661107,
+    "ml_accounting_avg": 25.245608916897034,
+    "llm_accounting_avg": 20.871422674578398,
+    "driver_winner": "ML",
+    "accounting_winner": "LLM",
+    "overall_winner": "LLM"
+  },
+  "llm_reasoning": "Projecting 7-9% annual revenue growth driven by AI integration, cloud expansion, and YouTube recovery. Q1/Q2 show seasonal moderation after strong holiday spending. Maintained 56-58% gross margins reflecting AI infrastructure investments. Capex increases to support AI compute needs. Growth accelerates in latter quarters as AI monetization improves and economic conditions stabilize."
+}

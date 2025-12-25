@@ -3,7 +3,7 @@
 PIPELINE COMPLETE FOR AAPL
 ================================================================================
 
-⏱️  Duration: 6.7 seconds
+⏱️  Duration: 6.0 seconds
 
 📊 RESULTS:
 ----------

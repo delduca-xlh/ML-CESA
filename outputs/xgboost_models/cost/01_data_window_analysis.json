@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-12-22T21:09:40.670193",
+  "ticker": "COST",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": 8.81288125617433,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "60Q": {
+      "mape": 11.414811402115863,
+      "samples": 44,
+      "quarters": 60,
+      "status": "success"
+    },
+    "80Q": {
+      "mape": 14.995486515959197,
+      "samples": 60,
+      "quarters": 80,
+      "status": "success"
+    },
+    "120Q": {
+      "mape": 24.298647721881093,
+      "samples": 92,
+      "quarters": 120,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": 8.81288125617433
+}

@@ -1,0 +1,5 @@
+{
+  "company_ticker": "TCEHY",
+  "model_type": "xgboost",
+  "trained": true
+}

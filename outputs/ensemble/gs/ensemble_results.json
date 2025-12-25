@@ -1,0 +1,50 @@
+{
+  "ticker": "GS",
+  "timestamp": "2025-12-25T14:07:01.390809",
+  "test_periods": 4,
+  "best_approach": "ML + Historical",
+  "approach_comparison": {
+    "ML + Historical": {
+      "driver_mape": 12.780882994951394,
+      "acct_mape": 13.56617778610203,
+      "overall_mape": 13.173530390526711
+    },
+    "ML + LLM Ratios": {
+      "driver_mape": 12.780882994951394,
+      "acct_mape": 17.58634669297187,
+      "overall_mape": 15.183614843961632
+    },
+    "Pure LLM": {
+      "driver_mape": 44.477200184477155,
+      "acct_mape": 9.372980718038912,
+      "overall_mape": 26.925090451258033
+    }
+  },
+  "best_approach_details": {
+    "driver_mapes": {
+      "sales_revenue": 19.457298837241787,
+      "cost_of_goods_sold": 17.668588108217158,
+      "overhead_expenses": 5.51973459650821,
+      "payroll_expenses": 5.519733386001007,
+      "capex": 15.739060046788806
+    },
+    "acct_mapes": {
+      "net_income": 17.321715490625113,
+      "ebit": 19.759661807706884,
+      "total_assets": 12.170914018304222,
+      "total_equity": 5.012419827771892
+    },
+    "avg_driver_mape": 12.780882994951394,
+    "avg_acct_mape": 13.56617778610203,
+    "overall_mape": 13.173530390526711
+  },
+  "grade": "\u2b50\u2b50\u2b50\u2b50 Very Good",
+  "llm_ratios": {
+    "gross_margin": 0.54,
+    "avg_net_income_margin": 0.12,
+    "avg_ebit_margin": 0.15,
+    "retention_ratio": 0.25,
+    "source": "LLM"
+  },
+  "llm_reasoning": "Expected modest margin compression due to competitive pressures and potential economic headwinds, while retention ratio increases as GS focuses more on capital accumulation for growth investments"
+}

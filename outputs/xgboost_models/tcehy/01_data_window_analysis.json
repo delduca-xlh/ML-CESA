@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-12-22T21:08:59.190357",
+  "ticker": "TCEHY",
+  "tested_windows": {
+    "20Q": {
+      "mape": 999.0,
+      "status": "skipped"
+    },
+    "40Q": {
+      "mape": NaN,
+      "samples": 28,
+      "quarters": 40,
+      "status": "success"
+    },
+    "58Q": {
+      "mape": NaN,
+      "samples": 43,
+      "quarters": 58,
+      "status": "success"
+    }
+  },
+  "optimal_window": 40,
+  "optimal_mape": NaN
+}

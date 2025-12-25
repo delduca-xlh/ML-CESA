@@ -1,0 +1,10 @@
+{
+  "gross_margin": 0.44,
+  "avg_net_income_margin": 0.25,
+  "avg_ebit_margin": 0.29,
+  "capex_to_revenue": 0.03,
+  "retention_ratio": -0.05,
+  "reasoning": "Gross margins expected to stabilize around 44% as the improving trend from 42.3% to 45.2% moderates with mix effects from new products. Net margins forecast at 25% based on 8-quarter average of 25.1%, supported by operational leverage and services growth. EBIT margins at 29% reflect continued operational efficiency. CapEx remains low at 3% of revenue, consistent with asset-light model averaging 2.7% historically. Negative retention ratio of -5% reflects AAPL's capital return strategy where total dividends and buybacks (~$25B quarterly) exceed net income, funded by strong cash generation and balance sheet optimization.",
+  "source": "LLM",
+  "ticker": "AAPL"
+}
