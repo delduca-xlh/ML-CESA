@@ -154,6 +154,7 @@ ML-CESA/
     │
     └── loan_pricing/                     # Bonus 3: Loan pricing
         ├── loan_pricing_model.py         # Main pricing model
+        ├── price_loan.py                 # ★ Price any ticker (standalone)
         └── fetch_market_data.py          # Market data fetcher
 ```
 
@@ -207,8 +208,10 @@ python src/financial_planning/credit_rating/test_bankruptcy_cases.py
 # Bonus 2: Risk Warning Extraction
 python src/financial_planning/credit_rating/test_risk_extractor.py
 
-# Bonus 3: Loan Pricing Model
-python src/financial_planning/loan_pricing/loan_pricing_model.py
+# Bonus 3: Loan Pricing - Price any ticker
+python src/financial_planning/loan_pricing/price_loan.py AAPL
+python src/financial_planning/loan_pricing/price_loan.py TSLA --maturity 7
+python src/financial_planning/loan_pricing/price_loan.py GM --no-rating
 
 # PDF Extraction Tool
 python src/financial_planning/utils/pdf_extractor.py GM
