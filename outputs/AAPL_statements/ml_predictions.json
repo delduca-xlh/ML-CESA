@@ -1,0 +1,39 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2026-01-02T22:45:23.226436",
+  "source": "ML Only (XGBoost Quantile)",
+  "predictions": [
+    {
+      "period": "Q+1",
+      "revenue": 127306359598.67499,
+      "net_income": 27181497947.853977,
+      "total_assets": 370767269590.8717,
+      "total_equity": 55236005548.02922,
+      "cash": 30550683069.19438
+    },
+    {
+      "period": "Q+2",
+      "revenue": 95280838843.61176,
+      "net_income": 22174528235.354527,
+      "total_assets": 330611356008.061,
+      "total_equity": 53837737562.82173,
+      "cash": 29680333472.154
+    },
+    {
+      "period": "Q+3",
+      "revenue": 92151991567.9977,
+      "net_income": 21611921172.870647,
+      "total_assets": 324949791058.69006,
+      "total_equity": 52474946113.366135,
+      "cash": 28354706637.77324
+    },
+    {
+      "period": "Q+4",
+      "revenue": 101313578760.63336,
+      "net_income": 22619821321.52493,
+      "total_assets": 335993616941.021,
+      "total_equity": 51048599106.14665,
+      "cash": 27260094596.37172
+    }
+  ]
+}

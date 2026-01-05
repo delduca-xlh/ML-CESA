@@ -1672,6 +1672,16 @@ Examples:
             'pages': None,
             'notes': 'Alibaba FY2024 (ending Mar 2024) - US GAAP, RMB millions'
         },
+        'SHELL': {
+            'url': 'https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab/text.multi.stream/1742905301176/ce28b952e201476287788cfcf35406e464f9785c/shell-annual-report-2023.pdf',
+            'pages': None,
+            'notes': 'Shell 2023 - IFRS, USD millions (Oil & Gas, 402 pages)'
+        },
+        'SHEL': {
+            'url': 'https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab/text.multi.stream/1742905301176/ce28b952e201476287788cfcf35406e464f9785c/shell-annual-report-2023.pdf',
+            'pages': None,
+            'notes': 'Shell 2023 - IFRS, USD millions (Oil & Gas, 402 pages)'
+        },
     }
     
     extractor = PDFExtractor(verbose=True)
