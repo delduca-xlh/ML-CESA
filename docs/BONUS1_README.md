@@ -49,69 +49,82 @@ ML-CESA/
 │   └── credit_rating_failed_tickers.txt   # Failed ticker list
 ├── src/financial_planning/credit_rating/
 │   ├── __init__.py
-│   ├── credit_rating_system.py            # Main rating system
+│   ├── credit_rating_system.py            # Main rating system (module)
 │   ├── ordinal_lr.py                      # Ordinal logistic regression
 │   ├── fraud_detector.py                  # Z-Score & M-Score
 │   ├── trainer.py                         # Model training
-│   ├── training_data.py                   # Data preparation
+│   ├── training_data.py                   # 450+ company ratings
+│   ├── rating_pipeline.py                 # Rating pipeline (module)
+│   ├── rate_ticker.py                     # ★ Rate any ticker (standalone)
 │   ├── fetch_training_data.py             # Data fetching from FMP
-│   ├── rating_pipeline.py                 # Rating pipeline
 │   ├── train_and_save_model.py            # Model persistence
-│   ├── test_evergrande.py                 # Evergrande test case
-│   └── test_bankruptcy_cases.py           # Bankruptcy validation
+│   ├── test_evergrande.py                 # ★ Evergrande test case
+│   └── test_bankruptcy_cases.py           # ★ Bankruptcy validation
 ```
 
 ## Usage
 
-### Training
+### Rate Any Company by Ticker (Recommended)
 
 ```bash
-# Fetch training data (447 companies)
-python -m src.financial_planning.credit_rating.fetch_training_data
+cd ~/Documents/GitHub/ML-CESA
 
-# Train the credit rating model
-python -m src.financial_planning.credit_rating.trainer
+# Rate Apple
+python src/financial_planning/credit_rating/rate_ticker.py AAPL
 
-# Or use the combined script
-python -m src.financial_planning.credit_rating.train_and_save_model
+# Rate Tesla
+python src/financial_planning/credit_rating/rate_ticker.py TSLA
+
+# Rate GM (skip fraud detection for faster results)
+python src/financial_planning/credit_rating/rate_ticker.py GM --no-fraud
+
+# Quiet mode
+python src/financial_planning/credit_rating/rate_ticker.py F --quiet
 ```
 
-### Rating a Company
+### Test on Bankruptcy Cases
 
 ```bash
-# Rate a company by ticker
-python -m src.financial_planning.credit_rating.rating_pipeline AAPL
+cd ~/Documents/GitHub/ML-CESA
 
-# Test on Evergrande
-python -m src.financial_planning.credit_rating.test_evergrande
+# Test on Evergrande (2020 & 2021)
+python src/financial_planning/credit_rating/test_evergrande.py
 
-# Test on all bankruptcy cases
-python -m src.financial_planning.credit_rating.test_bankruptcy_cases
+# Test on all bankruptcy cases (Evergrande, Lehman, Enron)
+python src/financial_planning/credit_rating/test_bankruptcy_cases.py
+```
+
+### Training (Optional)
+
+```bash
+cd ~/Documents/GitHub/ML-CESA
+
+# Fetch training data (447 companies from FMP API)
+python src/financial_planning/credit_rating/fetch_training_data.py
+
+# Train and save the model
+python src/financial_planning/credit_rating/train_and_save_model.py
 ```
 
 ### Python API
 
 ```python
-from src.financial_planning.credit_rating.credit_rating_system import CreditRatingSystem
+# Method 1: Use rate_ticker module
+import sys
+sys.path.insert(0, 'src/financial_planning/credit_rating')
+from rate_ticker import rate_ticker, print_report
 
-# Initialize system
+result = rate_ticker('AAPL')
+print_report(result)
+
+# Method 2: Use CreditRatingSystem class
+from credit_rating_system import CreditRatingSystem
+
 system = CreditRatingSystem()
-system.load_model('data/credit_rating_model.pkl')
+system.train_from_csv('data/credit_rating_training_data.csv')
 
-# Rate a company
-result = system.rate_company(
-    debt_to_equity=1.5,
-    interest_coverage=5.0,
-    current_ratio=1.2,
-    net_margin=0.08,
-    roa=0.05,
-    debt_to_ebitda=3.0,
-    total_assets=10e9
-)
-
-print(f"Rating: {result['rating']}")
-print(f"Probability: {result['probability']:.1%}")
-print(f"Z-Score: {result['z_score']:.2f}")
+result = system.predict(ticker='TSLA')
+system.print_report(result)
 ```
 
 ## Model Details
@@ -175,6 +188,16 @@ print(f"Z-Score: {result['z_score']:.2f}")
 | Evergrande | 2020 | D (100%) | 0.53 | Default Dec 2021 |
 | Lehman Brothers | 2007 | D (100%) | 0.04 | Bankrupt Sep 2008 |
 | Enron | 2000 | D (100%) | 1.79 | Bankrupt Dec 2001 |
+
+## Command Summary
+
+| Task | Command |
+|------|---------|
+| Rate any ticker | `python src/financial_planning/credit_rating/rate_ticker.py TICKER` |
+| Test Evergrande | `python src/financial_planning/credit_rating/test_evergrande.py` |
+| Test all bankruptcies | `python src/financial_planning/credit_rating/test_bankruptcy_cases.py` |
+| Fetch training data | `python src/financial_planning/credit_rating/fetch_training_data.py` |
+| Train model | `python src/financial_planning/credit_rating/train_and_save_model.py` |
 
 ## References
 

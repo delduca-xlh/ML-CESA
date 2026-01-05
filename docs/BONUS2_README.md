@@ -54,8 +54,8 @@ ML-CESA/
 │   └── bankruptcy_cases_cache.json        # Cached extraction results
 ├── src/financial_planning/credit_rating/
 │   ├── risk_extractor.py                  # Main risk extraction engine
-│   ├── test_risk_extractor.py             # Risk extractor tests
-│   └── test_bankruptcy_cases.py           # Bankruptcy validation tests
+│   ├── test_risk_extractor.py             # ★ Risk extractor tests
+│   └── test_bankruptcy_cases.py           # ★ Bankruptcy validation tests
 ```
 
 ## Usage
@@ -63,28 +63,52 @@ ML-CESA/
 ### Basic Usage
 
 ```bash
-# Test on bankruptcy cases (Evergrande, Lehman, Enron)
-python -m src.financial_planning.credit_rating.test_bankruptcy_cases
+cd ~/Documents/GitHub/ML-CESA
 
-# Test risk extractor on specific PDF
-python -m src.financial_planning.credit_rating.test_risk_extractor
+# Test risk extractor on Evergrande PDF
+python src/financial_planning/credit_rating/test_risk_extractor.py
+
+# Test on all bankruptcy cases (Evergrande, Lehman, Enron)
+python src/financial_planning/credit_rating/test_bankruptcy_cases.py
 ```
 
 ### Python API
 
 ```python
-from src.financial_planning.credit_rating.risk_extractor import RiskExtractor
+import sys
+sys.path.insert(0, 'src/financial_planning/credit_rating')
+from risk_extractor import AnnualReportRiskExtractor, analyze_annual_report
 
-# Initialize extractor
-extractor = RiskExtractor()
+# Method 1: Use convenience function
+report = analyze_annual_report(
+    pdf_path='data/annual_reports/evergrande/ar2020.pdf',
+    company_name='Evergrande 2020'
+)
 
-# Extract risks from PDF
-result = extractor.extract_from_pdf('data/annual_reports/evergrande/ar2020.pdf')
+print(f"Risk Level: {report.overall_risk}")
+print(f"Total Warnings: {len(report.warnings)}")
+print(f"Going Concern: {report.going_concern}")
 
-print(f"Risk Level: {result['overall_risk']}")
-print(f"Total Warnings: {result['total_warnings']}")
-print(f"Critical: {result['critical_count']}")
-print(f"Going Concern: {result['going_concern']}")
+# Method 2: Use extractor class
+extractor = AnnualReportRiskExtractor()
+report = extractor.extract_risks(text, "Company Name")
+extractor.print_report(report)
+```
+
+### Year-over-Year Comparison
+
+```python
+from risk_extractor import AnnualReportComparator
+
+comparator = AnnualReportComparator()
+comparison = comparator.compare(
+    prior_text=text_2020,
+    current_text=text_2021,
+    company_name="Evergrande",
+    prior_year="2020",
+    current_year="2021"
+)
+comparator.print_comparison_report(comparison)
 ```
 
 ## Risk Categories
@@ -181,6 +205,13 @@ def calculate_overall_risk(warnings):
 - Off-balance sheet vehicles (SPEs)
 - Related party abuse
 - Revenue manipulation schemes
+
+## Command Summary
+
+| Task | Command |
+|------|---------|
+| Test risk extractor | `python src/financial_planning/credit_rating/test_risk_extractor.py` |
+| Test bankruptcy cases | `python src/financial_planning/credit_rating/test_bankruptcy_cases.py` |
 
 ## References
 

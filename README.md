@@ -40,36 +40,36 @@ Financial institutions require accurate balance sheet forecasts for credit decis
 │   └──────┬───────┘    └──────┬───────┘    └──────┬───────┘                  │
 │          │                   │                   │                           │
 │          ▼                   ▼                   ▼                           │
-│   ┌──────────────────────────────────────────────────────┐                  │
-│   │              LAYER 1: DATA INGESTION                  │                  │
-│   │  • PDF Extraction (98.5% token savings)              │                  │
-│   │  • FMP API Integration                               │                  │
-│   │  • Feature Engineering (lag, rolling, YoY)           │                  │
-│   └──────────────────────────┬───────────────────────────┘                  │
+│   ┌──────────────────────────────────────────────────────────┐              │
+│   │              LAYER 1: DATA INGESTION                      │              │
+│   │  • PDF Extraction (98.5% token savings)                  │              │
+│   │  • FMP API Integration                                   │              │
+│   │  • Feature Engineering (lag, rolling, YoY)               │              │
+│   └──────────────────────────┬───────────────────────────────┘              │
 │                              │                                               │
 │                              ▼                                               │
-│   ┌──────────────────────────────────────────────────────┐                  │
-│   │              LAYER 2: FORECASTING ENGINE              │                  │
-│   │                                                       │                  │
-│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │                  │
-│   │   │  ML Only    │  │  ML + LLM   │  │  Pure LLM   │  │                  │
-│   │   │  (XGBoost)  │  │  (Ensemble) │  │  (Claude)   │  │                  │
-│   │   │  9.93%      │  │  6.24% ★    │  │  7.89%      │  │                  │
-│   │   └─────────────┘  └─────────────┘  └─────────────┘  │                  │
-│   │                                                       │                  │
-│   │   → Accounting Engine: Guarantees A = L + E          │                  │
-│   └──────────────────────────┬───────────────────────────┘                  │
+│   ┌──────────────────────────────────────────────────────────┐              │
+│   │              LAYER 2: FORECASTING ENGINE                  │              │
+│   │                                                           │              │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │              │
+│   │   │  ML Only    │  │  ML + LLM   │  │  Pure LLM   │      │              │
+│   │   │  (XGBoost)  │  │  (Ensemble) │  │  (Claude)   │      │              │
+│   │   │  9.93%      │  │  6.24% ★    │  │  7.89%      │      │              │
+│   │   └─────────────┘  └─────────────┘  └─────────────┘      │              │
+│   │                                                           │              │
+│   │   → Accounting Engine: Guarantees A = L + E              │              │
+│   └──────────────────────────┬───────────────────────────────┘              │
 │                              │                                               │
 │                              ▼                                               │
-│   ┌──────────────────────────────────────────────────────┐                  │
-│   │              LAYER 3: CREDIT ASSESSMENT               │                  │
-│   │                                                       │                  │
-│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │                  │
-│   │   │ Credit      │  │ Risk        │  │ Loan        │  │                  │
-│   │   │ Rating      │  │ Warning     │  │ Pricing     │  │                  │
-│   │   │ 72.4%       │  │ 4/4 cases   │  │ R²=0.383    │  │                  │
-│   │   └─────────────┘  └─────────────┘  └─────────────┘  │                  │
-│   └──────────────────────────────────────────────────────┘                  │
+│   ┌──────────────────────────────────────────────────────────┐              │
+│   │              LAYER 3: CREDIT ASSESSMENT                   │              │
+│   │                                                           │              │
+│   │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │              │
+│   │   │ Credit      │  │ Risk        │  │ Loan        │      │              │
+│   │   │ Rating      │  │ Warning     │  │ Pricing     │      │              │
+│   │   │ 72.4%       │  │ 4/4 cases   │  │ R²=0.383    │      │              │
+│   │   └─────────────┘  └─────────────┘  └─────────────┘      │              │
+│   └──────────────────────────────────────────────────────────┘              │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -80,53 +80,81 @@ Financial institutions require accurate balance sheet forecasts for credit decis
 
 ```
 ML-CESA/
-├── README.md                          # This file
-├── PART1_README.md                    # Part 1 detailed documentation
-├── PART2_README.md                    # Part 2 detailed documentation
-├── requirements.txt                   # Python dependencies
+├── README.md                              # This file
+├── requirements.txt                       # Python dependencies
 │
-├── auto_forecast_pipeline.py          # Part 1: Main XGBoost pipeline
-├── run_ensemble.py                    # Part 2: Ensemble model (ML + LLM)
-├── run_part2.py                       # Part 2: LLM ratio integration
-├── run_part2_pure_llm.py              # Part 2: Pure LLM comparison
+├── run_simulator.py                       # Part 1: XGBoost forecasting pipeline
+├── run_ensemble.py                        # Part 2: Ensemble model (ML + LLM)
+├── auto_forecast_pipeline.py              # Alternative: Full auto pipeline
+├── print_structure.py                     # Utility: Print project structure
 │
-├── data/                              # Training data and models
-│   ├── credit_rating_training_data.csv      # 447 companies with ratings
-│   ├── credit_rating_model.pkl              # Trained credit rating model
-│   ├── loan_pricing_model.pkl               # Trained pricing model
-│   └── annual_reports/                      # Bankruptcy case PDFs
-│       ├── evergrande/                      # Evergrande 2020-2021
-│       ├── lehman/                          # Lehman Brothers 2007
-│       └── enron/                           # Enron 2000
+├── docs/                                  # Documentation
+│   ├── PART1_README.md                    # Part 1 detailed documentation
+│   ├── PART2_README.md                    # Part 2 detailed documentation
+│   ├── BONUS1_README.md                   # Bonus 1: Credit rating
+│   ├── BONUS2_README.md                   # Bonus 2: Risk extraction
+│   ├── BONUS3_README.md                   # Bonus 3: Loan pricing
+│   ├── main_executive_v2.pdf              # Executive Report (25 pages)
+│   └── main_revised.pdf                   # Full Academic Report (73 pages)
 │
-├── docs/                              # Documentation
-│   ├── main_executive_v2.pdf          # Executive Report (25 pages)
-│   └── main_revised.pdf               # Full Academic Report (73 pages)
+├── data/                                  # Training data and models
+│   ├── credit_rating_training_data.csv   # 447 companies with ratings
+│   ├── credit_rating_model.pkl           # Trained credit rating model
+│   ├── loan_pricing_model.pkl            # Trained pricing model
+│   └── annual_reports/                   # Bankruptcy case PDFs
+│       ├── evergrande/                   # Evergrande 2020-2021
+│       ├── lehman/                       # Lehman Brothers 2007
+│       └── enron/                        # Enron 2000
 │
-├── outputs/                           # Model outputs
-│   ├── xgboost_models/{ticker}/       # Part 1 results
-│   ├── ensemble/{ticker}/             # Part 2 ensemble results
-│   ├── part2_results/{ticker}/        # LLM integration results
-│   └── part2_pure_llm/{ticker}/       # Pure LLM results
+├── outputs/                              # Model outputs (by ticker)
+│   └── {ticker}/                         # Per-company outputs
+│       ├── xgboost_models/               # Part 1: XGBoost models
+│       ├── ensemble/                     # Part 2: Ensemble results
+│       ├── part2_results/                # LLM integration results
+│       └── pdf_reports/                  # Generated PDF reports
 │
 └── src/financial_planning/
-    ├── models/                        # Part 1: Forecasting models
-    │   ├── accounting_engine.py       # Accounting identity enforcement
+    ├── balance_sheet_simulator/          # Core simulator module
+    │   ├── __init__.py
+    │   ├── accounting_engine.py          # Accounting identity enforcement
+    │   ├── quantile_simulator.py         # XGBoost quantile regression
+    │   ├── rolling_validator.py          # Rolling window validation
+    │   ├── ensemble_validator.py         # ML + LLM ensemble
+    │   ├── llm_ensemble.py               # LLM integration layer
+    │   ├── multi_year_simulator.py       # Multi-year forecasting
+    │   ├── pdf_report.py                 # PDF report generation
+    │   ├── statement_printer.py          # Statement formatting
+    │   └── data_structures.py            # Data classes
+    │
+    ├── models/                           # Alternative implementations
+    │   ├── financial_model.py
     │   ├── balance_sheet_forecaster.py
     │   └── forecaster_integration.py
     │
-    ├── utils/                         # Utilities
-    │   ├── fmp_data_fetcher.py        # Financial Modeling Prep API
-    │   ├── llm_assumption_generator.py # LLM ratio generation
-    │   └── pdf_extractor.py           # PDF extraction tool
+    ├── utils/                            # Utilities
+    │   ├── fmp_data_fetcher.py           # Financial Modeling Prep API
+    │   ├── llm_assumption_generator.py   # LLM ratio generation
+    │   └── pdf_extractor.py              # PDF extraction tool
     │
-    ├── credit_rating/                 # Bonus 1: Credit rating
-    │   ├── credit_rating_system.py
-    │   ├── fraud_detector.py          # Z-Score & M-Score
-    │   └── risk_extractor.py          # Bonus 2: Risk extraction
+    ├── credit_rating/                    # Bonus 1 & 2: Credit rating
+    │   ├── __init__.py
+    │   ├── credit_rating_system.py       # Main rating system
+    │   ├── ordinal_lr.py                 # Ordinal logistic regression
+    │   ├── fraud_detector.py             # Z-Score & M-Score
+    │   ├── risk_extractor.py             # Risk warning extraction
+    │   ├── trainer.py                    # Model training
+    │   ├── training_data.py              # 450+ company ratings
+    │   ├── rating_pipeline.py            # Rating pipeline (module)
+    │   ├── rate_ticker.py                # Rate any ticker (standalone)
+    │   ├── fetch_training_data.py        # Data fetching from FMP
+    │   ├── train_and_save_model.py       # Model persistence
+    │   ├── test_evergrande.py            # Evergrande test case
+    │   ├── test_bankruptcy_cases.py      # Bankruptcy validation
+    │   └── test_risk_extractor.py        # Risk extractor tests
     │
-    └── loan_pricing/                  # Bonus 3: Loan pricing
-        └── loan_pricing_model.py
+    └── loan_pricing/                     # Bonus 3: Loan pricing
+        ├── loan_pricing_model.py         # Main pricing model
+        └── fetch_market_data.py          # Market data fetcher
 ```
 
 ---
@@ -154,14 +182,38 @@ export ANTHROPIC_API_KEY="your_anthropic_key"
 ### Run Forecasting
 
 ```bash
-# Part 1: XGBoost forecasting
-python auto_forecast_pipeline.py AAPL
+cd ~/Documents/GitHub/ML-CESA
 
-# Part 2: Ensemble with LLM
+# Part 1: XGBoost balance sheet forecasting
+python run_simulator.py AAPL
+
+# Part 2: Ensemble with LLM integration
 python run_ensemble.py AAPL
+```
 
-# PDF extraction
-python -m src.financial_planning.utils.pdf_extractor GM
+### Run Bonus Sections
+
+```bash
+cd ~/Documents/GitHub/ML-CESA
+
+# Bonus 1: Credit Rating - Rate any ticker
+python src/financial_planning/credit_rating/rate_ticker.py AAPL
+python src/financial_planning/credit_rating/rate_ticker.py TSLA
+
+# Bonus 1: Credit Rating - Test bankruptcy cases
+python src/financial_planning/credit_rating/test_evergrande.py
+python src/financial_planning/credit_rating/test_bankruptcy_cases.py
+
+# Bonus 2: Risk Warning Extraction
+python src/financial_planning/credit_rating/test_risk_extractor.py
+
+# Bonus 3: Loan Pricing Model
+python src/financial_planning/loan_pricing/loan_pricing_model.py
+
+# PDF Extraction Tool
+python src/financial_planning/utils/pdf_extractor.py GM
+python src/financial_planning/utils/pdf_extractor.py MICROSOFT
+python src/financial_planning/utils/pdf_extractor.py LVMH
 ```
 
 ---

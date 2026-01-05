@@ -45,30 +45,34 @@ ML-CESA/
 │   ├── loan_pricing_training_data_with_market.csv  # With beta & market cap
 │   └── loan_pricing_model.pkl                   # Trained model
 ├── src/financial_planning/loan_pricing/
-│   ├── loan_pricing_model.py                    # Main pricing model
+│   ├── loan_pricing_model.py                    # ★ Main pricing model
 │   └── fetch_market_data.py                     # Market data fetcher (beta, etc.)
 ```
 
 ## Usage
 
-### Training
+### Train and Test Model
 
 ```bash
-# Fetch market data for training
-python -m src.financial_planning.loan_pricing.fetch_market_data
+cd ~/Documents/GitHub/ML-CESA
 
-# Train the loan pricing model
-python -m src.financial_planning.loan_pricing.loan_pricing_model
+# Train and test loan pricing model (includes demo)
+python src/financial_planning/loan_pricing/loan_pricing_model.py
+
+# Fetch market data for training (beta, market cap)
+python src/financial_planning/loan_pricing/fetch_market_data.py
 ```
 
 ### Python API
 
 ```python
-from src.financial_planning.loan_pricing.loan_pricing_model import LoanPricingModel
+import sys
+sys.path.insert(0, 'src/financial_planning/loan_pricing')
+from loan_pricing_model import LoanPricingModel
 
-# Load model
+# Initialize and train
 model = LoanPricingModel()
-model.load('data/loan_pricing_model.pkl')
+model.train('data/loan_pricing_training_data.csv')
 
 # Price a rated company loan
 result = model.predict(
@@ -99,7 +103,11 @@ result = model.predict(
     rating=None,  # No rating!
     debt_to_equity=1.2,
     interest_coverage=6.0,
-    # ... other ratios
+    current_ratio=1.5,
+    net_margin=0.08,
+    roa=0.06,
+    debt_to_ebitda=2.5,
+    total_assets=5e9
 )
 ```
 
@@ -186,6 +194,13 @@ $$\Delta\text{Price} \approx -\text{Duration} \times \Delta\text{Spread}$$
 |------|-------------|---------|
 | `loan_pricing_training_data.csv` | Base training data | 447 |
 | `loan_pricing_training_data_with_market.csv` | With beta & market cap | 447 |
+
+## Command Summary
+
+| Task | Command |
+|------|---------|
+| Train & test model | `python src/financial_planning/loan_pricing/loan_pricing_model.py` |
+| Fetch market data | `python src/financial_planning/loan_pricing/fetch_market_data.py` |
 
 ## References
 
